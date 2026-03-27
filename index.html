@@ -370,6 +370,70 @@
       color: var(--slate-700);
     }
 
+    .imprint-link {
+      font-size: 0.6rem;
+      color: var(--slate-700);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      transition: color 0.2s ease;
+    }
+
+    .imprint-link:hover {
+      color: var(--slate-400);
+    }
+
+    .imprint-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .imprint-box {
+      position: relative;
+      background: var(--slate-900);
+      border: 1px solid var(--slate-700);
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 320px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .imprint-box h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--white);
+    }
+
+    .imprint-box p {
+      font-size: 0.85rem;
+      color: var(--slate-400);
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+    }
+
+    .imprint-close {
+      position: absolute;
+      top: 0.75rem;
+      right: 1rem;
+      font-size: 1.4rem;
+      color: var(--slate-400);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .imprint-close:hover {
+      color: var(--white);
+    }
+
     /* Animations */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(15px); }
@@ -458,7 +522,17 @@
 
     <footer class="footer">
       <span class="footer-brand">AngoraDesign</span>
+      <a href="#" class="imprint-link" onclick="document.getElementById('imprint').style.display=document.getElementById('imprint').style.display==='flex'?'none':'flex';return false;">Impressum</a>
     </footer>
+
+    <div id="imprint" class="imprint-overlay" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+      <div class="imprint-box">
+        <h3>Impressum</h3>
+        <p>Albert Hamm-Plewa<br>Trofaiach, &Ouml;sterreich</p>
+        <p>Kontakt: angoraelchkuh@aon.at</p>
+        <a href="#" onclick="document.getElementById('imprint').style.display='none';return false;" class="imprint-close">&times;</a>
+      </div>
+    </div>
 
   </div>
 
