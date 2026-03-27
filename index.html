@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AngoraElchKuh — AI Artist & Merch Designer</title>
+  <meta name="description" content="AngoraElchKuh — AI Artist, Merch Designer & Creator. Links zu Amazon Shop, YouTube, TikTok, Twitch und Instagram.">
+  <meta property="og:title" content="AngoraElchKuh">
+  <meta property="og:description" content="AI Artist & Merch Designer — alle Links an einem Ort.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://angoraelchkuh.github.io">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --slate-950: #0c0f1a;
+      --slate-900: #111827;
+      --slate-800: #1e293b;
+      --slate-700: #334155;
+      --slate-400: #94a3b8;
+      --slate-200: #e2e8f0;
+      --white: #f8fafc;
+      --accent: #6366f1;
+      --accent-light: #818cf8;
+      --accent-glow: rgba(99, 102, 241, 0.15);
+      --teal: #2dd4bf;
+      --teal-glow: rgba(45, 212, 191, 0.1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+      background: var(--slate-950);
+      color: var(--white);
+    }
+
+    /* Mesh gradient background */
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .bg::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -20%;
+      width: 80%;
+      height: 80%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 60%);
+      animation: float1 25s ease-in-out infinite alternate;
+    }
+
+    .bg::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -20%;
+      width: 70%;
+      height: 70%;
+      background: radial-gradient(circle, rgba(45, 212, 191, 0.08) 0%, transparent 60%);
+      animation: float2 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes float1 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-60px, 40px) scale(1.1); }
+    }
+    @keyframes float2 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, -30px) scale(1.05); }
+    }
+
+    /* Subtle grid pattern */
+    .grid-pattern {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+    }
+
+    /* Glass card */
+    .card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 420px;
+      margin: 1.5rem;
+      padding: 2.5rem 2rem 2rem;
+      background: rgba(17, 24, 39, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(99, 102, 241, 0.1);
+      border-radius: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.03),
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 0 120px rgba(99, 102, 241, 0.05);
+      animation: cardIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Accent line top */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), var(--teal), transparent);
+      border-radius: 2px;
+      opacity: 0.7;
+    }
+
+    /* Profile */
+    .profile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      animation: fadeUp 0.6s ease-out 0.15s both;
+    }
+
+    .avatar-wrap {
+      position: relative;
+      width: 110px;
+      height: 110px;
+    }
+
+    .avatar-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--teal));
+      z-index: -1;
+      animation: rotateGradient 6s linear infinite;
+    }
+
+    @keyframes rotateGradient {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    .avatar-wrap::after {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-glow), var(--teal-glow));
+      z-index: -2;
+      filter: blur(12px);
+    }
+
+    .avatar {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--slate-950);
+      display: block;
+    }
+
+    .name {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--white) 0%, var(--slate-200) 50%, var(--teal) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .tagline {
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--slate-400);
+    }
+
+    /* Status badge */
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.8rem;
+      background: rgba(45, 212, 191, 0.08);
+      border: 1px solid rgba(45, 212, 191, 0.15);
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--teal);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--teal);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.4); }
+      50% { opacity: 0.7; box-shadow: 0 0 0 4px rgba(45, 212, 191, 0); }
+    }
+
+    /* Divider */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--slate-700), transparent);
+      animation: fadeUp 0.6s ease-out 0.3s both;
+    }
+
+    /* Links */
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      width: 100%;
+      animation: fadeUp 0.6s ease-out 0.4s both;
+    }
+
+    .link-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.85rem 1.1rem;
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid rgba(99, 102, 241, 0.06);
+      border-radius: 14px;
+      text-decoration: none;
+      color: var(--slate-200);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 500;
+      font-size: 0.95rem;
+      letter-spacing: 0.01em;
+      transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .link-btn:hover {
+      background: rgba(99, 102, 241, 0.08);
+      border-color: rgba(99, 102, 241, 0.2);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);
+      color: var(--white);
+    }
+
+    .link-icon {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      background: rgba(99, 102, 241, 0.08);
+      transition: all 0.25s ease;
+    }
+
+    .link-btn:hover .link-icon {
+      background: rgba(99, 102, 241, 0.15);
+    }
+
+    .link-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--accent-light);
+      transition: all 0.25s ease;
+    }
+
+    .link-btn:hover .link-icon svg {
+      fill: var(--white);
+    }
+
+    .link-label { flex: 1; }
+
+    .link-arrow {
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: all 0.25s ease;
+      color: var(--accent-light);
+      font-size: 1.1rem;
+    }
+
+    .link-btn:hover .link-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Featured (Amazon) */
+    .link-btn.featured {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(45, 212, 191, 0.05));
+      border-color: rgba(99, 102, 241, 0.12);
+    }
+
+    .link-btn.featured .link-icon {
+      background: linear-gradient(135deg, var(--accent), var(--teal));
+    }
+
+    .link-btn.featured .link-icon svg {
+      fill: white;
+    }
+
+    .featured-tag {
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--teal);
+      background: rgba(45, 212, 191, 0.1);
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+    }
+
+    /* Footer */
+    .footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      animation: fadeUp 0.6s ease-out 0.55s both;
+    }
+
+    .footer-brand {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--slate-700);
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive */
+    @media (min-width: 768px) {
+      .card { padding: 3rem 2.5rem 2.5rem; }
+      .name { font-size: 2rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background effects -->
+  <div class="bg"></div>
+  <div class="grid-pattern"></div>
+
+  <!-- Card -->
+  <div class="card">
+
+    <div class="profile">
+      <div class="avatar-wrap">
+        <img class="avatar" src="avatar.jpg" alt="AngoraElchKuh Profilbild">
+      </div>
+      <h1 class="name">AngoraElchKuh</h1>
+      <p class="tagline">AI Artist & Merch Designer</p>
+      <div class="status">
+        <span class="status-dot"></span>
+        Creator aus &Ouml;sterreich
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <nav class="links">
+      <a href="https://www.amazon.de/s?rh=n%3A77028031%2Cp_4%3AAngoraDesign&ref=bl_sl_s_ap_web_77028031" target="_blank" rel="noopener" class="link-btn featured">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24"><path d="M1.04 17.52c-.01.12.1.22.21.14 2.07-1.65 6.53-4.77 12.43-4.77 3.91 0 7.21 1.68 8.4 2.53.14.1.3-.03.23-.18-.78-1.79-3.49-5.93-8.63-5.93-5.36 0-9.93 3.46-12.36 7.58-.08.14-.16.28-.22.42l-.06.21zm14.28.43c-.13.07-.11.26.04.29 1.76.39 5.64.71 7.51-.78.1-.08.05-.24-.07-.22-1.72.27-5.34.65-7.48.71z"/></svg>
+        </span>
+        <span class="link-label">AngoraDesign auf Amazon</span>
+        <span class="featured-tag">Shop</span>
+        <span class="link-arrow">&#8250;</span>
+      </a>
+
+      <a href="https://youtube.com/@angoraelchkuh" target="_blank" rel="noopener" class="link-btn">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24"><path d="M23.5 6.19a3.02 3.02 0 00-2.12-2.14C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.38.55A3.02 3.02 0 00.5 6.19C0 8.07 0 12 0 12s0 3.93.5 5.81a3.02 3.02 0 002.12 2.14c1.88.55 9.38.55 9.38.55s7.5 0 9.38-.55a3.02 3.02 0 002.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.81zM9.54 15.57V8.43L15.82 12l-6.28 3.57z"/></svg>
+        </span>
+        <span class="link-label">YouTube</span>
+        <span class="link-arrow">&#8250;</span>
+      </a>
+
+      <a href="https://tiktok.com/@angoraelchkuh" target="_blank" rel="noopener" class="link-btn">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V9.27a8.28 8.28 0 004.76 1.51V7.33a4.85 4.85 0 01-1-.64z"/></svg>
+        </span>
+        <span class="link-label">TikTok</span>
+        <span class="link-arrow">&#8250;</span>
+      </a>
+
+      <a href="https://twitch.tv/angoraelchkuh" target="_blank" rel="noopener" class="link-btn">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24"><path d="M11.64 5.93H13.07V10.21H11.64M15.57 5.93H17V10.21H15.57M7 2L3.43 5.57V18.43H7.71V22L11.29 18.43H14.14L20.57 12V2M19.14 11.29L16.29 14.14H13.43L10.93 16.64V14.14H7.71V3.43H19.14Z"/></svg>
+        </span>
+        <span class="link-label">Twitch</span>
+        <span class="link-arrow">&#8250;</span>
+      </a>
+
+      <a href="https://instagram.com/angoraelchkuh" target="_blank" rel="noopener" class="link-btn">
+        <span class="link-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.97.24 2.44.41.61.24 1.05.52 1.51.98.46.46.74.9.98 1.51.17.47.36 1.27.41 2.44.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.24 1.97-.41 2.44-.24.61-.52 1.05-.98 1.51-.46.46-.9.74-1.51.98-.47.17-1.27.36-2.44.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.97-.24-2.44-.41a4.08 4.08 0 01-1.51-.98 4.08 4.08 0 01-.98-1.51c-.17-.47-.36-1.27-.41-2.44C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.24-1.97.41-2.44.24-.61.52-1.05.98-1.51.46-.46.9-.74 1.51-.98.47-.17 1.27-.36 2.44-.41C8.84 2.17 9.22 2.16 12 2.16zM12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63a5.96 5.96 0 00-2.16 1.4A5.96 5.96 0 00.63 4.14C.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.4 2.16.7.68 1.37 1.09 2.16 1.4.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56a5.96 5.96 0 002.16-1.4 5.96 5.96 0 001.4-2.16c.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a5.96 5.96 0 00-1.4-2.16A5.96 5.96 0 0019.86.63C19.1.33 18.22.13 16.95.07 15.67.01 15.26 0 12 0zm0 5.84a6.16 6.16 0 100 12.32 6.16 6.16 0 000-12.32zM12 16a4 4 0 110-8 4 4 0 010 8zm7.85-10.41a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/></svg>
+        </span>
+        <span class="link-label">Instagram</span>
+        <span class="link-arrow">&#8250;</span>
+      </a>
+    </nav>
+
+    <footer class="footer">
+      <span class="footer-brand">AngoraDesign</span>
+    </footer>
+
+  </div>
+
+</body>
+</html>
